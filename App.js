@@ -11,13 +11,22 @@ import Splash from './screens/Splash';
 import Topic from './screens/Topic';
 import Main  from './screens/Main';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Info from './screens/Info';
+import DrawerContent from './components/DrawerContent';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+function DrawerRoutes(){
+  return(
+    <Drawer.Navigator initialRouteName='HomeScreen' drawerContent={props=><DrawerContent {...props}/>}>
+      <Drawer.Screen name='HomeScreen' component={Home}/>
+      <Drawer.Screen name='InfoScreen' component={Info}/>
+    </Drawer.Navigator>
+  )
+}
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
   return (
     <PaperProvider>
-      {/* {isLogin? <Home/> :  */}
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -43,7 +52,7 @@ const App = () => {
           />
           <Stack.Screen
             name="HomeScreen"
-            component={Home}
+            component={DrawerRoutes}
             options={{
               headerShown: false,
             }}
@@ -62,7 +71,6 @@ const App = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
-      {/* } */}
     </PaperProvider>
   );
 };

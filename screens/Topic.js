@@ -54,7 +54,7 @@ const Topic = ({route}) => {
       return data
   }
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.language}>
         <Animatable.Image
           animation="bounceIn"
@@ -73,11 +73,11 @@ const Topic = ({route}) => {
         numColumns={numberCols}
         keyExtractor={(topic, index) => index.toString()}
       />
-    </ScrollView>
+    </View>
   );
 };
 const {height} = Dimensions.get('screen');
-const height_logo = height * 0.7 * 0.3;
+const height_logo = height * 0.6 * 0.3;
 var styles = StyleSheet.create({
   container: {
     flex: 1,

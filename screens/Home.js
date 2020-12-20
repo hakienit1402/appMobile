@@ -20,7 +20,7 @@ const Home = ({navigation}) => {
               <StatusBar barStyle="light-content" />
                 <ImageBackground
                source={require('../src/assets/home.png')}
-               style={{width:'100%',height:250}}
+               style={{width:'100%',height:200}}
                imageStyle={{borderBottomRightRadius:60}}
                resizeMode={'stretch'}
                 >
@@ -29,10 +29,10 @@ const Home = ({navigation}) => {
                         <Text style={styles.name}>Hi {name}</Text>
                         <Text style={styles.title}>What language would you like to practice? </Text>
                     </View>
-                    <Feather name="menu" size={30} color="#ffffff" style={styles.menuIcon} />
-                    <Feather name="settings" size={30} color="#ffffff" style={styles.settingIcon} />
+                    <Feather name="menu" size={30} color="#ffffff" style={styles.menuIcon} onPress={()=>navigation.toggleDrawer()}/>
+                    {/* <Feather name="settings" size={30} color="#ffffff" style={styles.settingIcon} /> */}
                 </ImageBackground>
-                <ScrollView>
+                <View>
                     <View style={{padding:20}}>
                         <Text style={{fontSize:22,fontWeight:'bold'}}>Choose language</Text>
                     </View>
@@ -44,7 +44,7 @@ const Home = ({navigation}) => {
                         ))}
                         
                     </View>
-                </ScrollView>
+                </View>
         </View>
     )
 }
@@ -59,13 +59,13 @@ var styles = StyleSheet.create({
         top:0,
         right:0,
         left:0,
-        height:250,
+        height:200,
         backgroundColor:'#0080FF',
         opacity:0.3,
         borderBottomRightRadius:65
     },
     headerContainer:{
-        paddingTop:130,
+        paddingTop:100,
         paddingLeft:20,
         
     },
