@@ -20,7 +20,7 @@ const Home = ({navigation}) => {
               <StatusBar barStyle="light-content" />
                 <ImageBackground
                source={require('../src/assets/home.png')}
-               style={{width:'100%',height:200}}
+               style={{width:'100%',height:250}}
                imageStyle={{borderBottomRightRadius:60}}
                resizeMode={'stretch'}
                 >
@@ -59,13 +59,13 @@ var styles = StyleSheet.create({
         top:0,
         right:0,
         left:0,
-        height:200,
+        height:250,
         backgroundColor:'#0080FF',
         opacity:0.3,
         borderBottomRightRadius:65
     },
     headerContainer:{
-        paddingTop:100,
+        paddingTop:130,
         paddingLeft:20,
         
     },
