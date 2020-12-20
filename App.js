@@ -10,7 +10,9 @@ import SignUp from './screens/SignUp';
 import Splash from './screens/Splash';
 import Topic from './screens/Topic';
 import Main  from './screens/Main';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
   return (
@@ -18,7 +20,7 @@ const App = () => {
       {/* {isLogin? <Home/> :  */}
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="SplashScreen"
             component={Splash}
             options={{
@@ -50,7 +52,7 @@ const App = () => {
             name="TopicScreen"
             component={Topic}
             options={({route}) => ({title: route.params.language.name})}
-          /> */}
+          />
            <Stack.Screen
             name="MainScreen"
             component={Main}

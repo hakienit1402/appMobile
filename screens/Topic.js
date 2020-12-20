@@ -54,7 +54,7 @@ const Topic = ({route}) => {
       return data
   }
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.language}>
         <Animatable.Image
           animation="bounceIn"
@@ -66,7 +66,6 @@ const Topic = ({route}) => {
           Choose {language.name} topic
         </Text>
       </View>
-
       <FlatList
         data={formatData(data,numberCols)}
         renderItem={_renderItem}
@@ -74,7 +73,7 @@ const Topic = ({route}) => {
         numColumns={numberCols}
         keyExtractor={(topic, index) => index.toString()}
       />
-    </View>
+    </ScrollView>
   );
 };
 const {height} = Dimensions.get('screen');
