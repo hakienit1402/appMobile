@@ -114,8 +114,6 @@ const Main = ({route}) => {
       }]}>
             
         <Text>{question[count].key}</Text>
-
-
         </View>
       </View>
       <View style={styles.option_container}>

@@ -72,6 +72,7 @@ const Topic = ({route}) => {
         style={{flex:1}}
         numColumns={numberCols}
         keyExtractor={(topic, index) => index.toString()}
+        // onEndReached
       />
     </View>
   );
