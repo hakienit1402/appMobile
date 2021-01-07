@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "155593824592",
+    "firebase_url": "https://appmobile2020-notfound-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "appmobile2020-notfound",
+    "storage_bucket": "appmobile2020-notfound.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155593824592:android:3399a74645fefab1bef455",
+        "android_client_info": {
+          "package_name": "com.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155593824592-05fthtckj9c3bg547k9e33smsplo6p4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEgeW5RCn8T1QIZOnKD3n03fDumWgV0lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155593824592-05fthtckj9c3bg547k9e33smsplo6p4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

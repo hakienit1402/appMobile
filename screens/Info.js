@@ -1,17 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/Feather';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  Dimensions,
-  Linking,
-  TouchableOpacity,
+  Dimensions, Image, SafeAreaView,
+  ScrollView, StyleSheet, Text,
+  TouchableOpacity, View
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Feather';
 const HistoryItems = () => {
   return (
     <View style={styles.history_item}>

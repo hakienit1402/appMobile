@@ -9,101 +9,94 @@ import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import Splash from './screens/Splash';
 import Topic from './screens/Topic';
-import Main  from './screens/Main';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import Main from './screens/Main';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import Info from './screens/Info';
 import DrawerContent from './components/DrawerContent';
-const Stack = createStackNavigator();
+const AppStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-// function DrawerRoutes(){
-//   return(
-//     <Drawer.Navigator initialRouteName='HomeScreen' drawerContent={props=><DrawerContent {...props}/>}>
-//       <Drawer.Screen name='HomeScreen' component={Home}/>
-//       <Drawer.Screen name='InfoScreen' component={Info}/>
-//     </Drawer.Navigator>
-//   )
-// }
-const HoomStackScreen = ()=>{
+const HoomStackScreen = () => {
   return (
     <HomeStack.Navigator initialRouteName="HomeScreen">
-       <HomeStack.Screen
-      name="HomeScreen"
-      component={Home}
-      options={{
-        headerShown: false,
-      }}
-    />
-     <HomeStack.Screen
-      name="InfoScreen"
-      component={Info}
-      options={{
-        headerShown: false, 
-      }}
-    />
-        <HomeStack.Screen
+      <HomeStack.Screen
+        name="HomeScreen"
+        component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name="InfoScreen"
+        component={Info}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
         name="TopicScreen"
         component={Topic}
         options={({route}) => ({title: route.params.language.name})}
-          />
-        <HomeStack.Screen
-      name="MainScreen"
-      component={Main}
-      options={{
-        headerShown: false,
-      }}
-    />
+      />
+      <HomeStack.Screen
+        name="MainScreen"
+        component={Main}
+        options={{
+          headerShown: false,
+        }}
+      />
     </HomeStack.Navigator>
-    
-  )
-}
-const RootStackScreen = ({navigation}) => {
+  );
+};
+function DrawerHome() {
   return (
-    <Stack.Navigator>
-    <Stack.Screen
-      name="SplashScreen"
-      component={Splash}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <Stack.Screen
-      name="SignInScreen"
-      component={SignIn}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <Stack.Screen
-      name="SignUpScreen"
-      component={SignUp}
-      options={{
-        headerShown: false,
-      }}
-    />
-  </Stack.Navigator>
-  )
+    <Drawer.Navigator
+      initialRouteName="HomeScreen"
+      drawerContent={(props) => <DrawerContent {...props} />}>
+      <Drawer.Screen name="HomeScreen" component={HoomStackScreen} />
+    </Drawer.Navigator>
+  );
 }
 const App = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+
+  // const [isLogin, setIsLogin] = useState(true);
   return (
     <PaperProvider>
       <NavigationContainer>
-        {isLogin?
-          <Drawer.Navigator initialRouteName='HomeScreen' drawerContent={props=><DrawerContent {...props}/>}>
-          <Drawer.Screen name='HomeScreen' component={HoomStackScreen}/>
-          {/* <Drawer.Screen name='InfoScreen' component={Info}/> */}
-        </Drawer.Navigator>
-        :
-        <RootStackScreen/>
-
-        }
-    
-    </NavigationContainer>
+        <AppStack.Navigator initialRouteName="SplashScreen">
+          <AppStack.Screen
+            name="HomeScreen"
+            component={DrawerHome}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <AppStack.Screen
+            name="SplashScreen"
+            component={Splash}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <AppStack.Screen
+            name="SignInScreen"
+            component={SignIn}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <AppStack.Screen
+            name="SignUpScreen"
+            component={SignUp}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </AppStack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

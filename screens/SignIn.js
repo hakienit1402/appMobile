@@ -1,31 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
+  StatusBar, StyleSheet,
   Text,
-  StatusBar,
-  Dimensions,
-  TouchableOpacity,
-  TextInput,
+  TextInput, TouchableOpacity, View
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
+import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import * as Animatable from 'react-native-animatable'
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const SignIn = ({navigation}) => {
-  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [checkUsername, setCheckUsername] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
   const [checkPassword, setCheckPassword] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const handleChangeUsername = (text) => {
-      setUsername(text)
+  const handleChangeEmail = (text) => {
+      setEmail(text)
     if (text.length !== 0) {
-      setCheckUsername(true);
+      setCheckEmail(true);
     } else {
-      setCheckUsername(false);
+      setCheckEmail(false);
     }
   };
   const handleChangePassword = (text) => {
@@ -41,7 +35,7 @@ const SignIn = ({navigation}) => {
         <Text style={styles.title_header}>Welcome Coder !</Text>
       </View>
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
-        <Text style={styles.title_footer}>Username</Text>
+        <Text style={styles.title_footer}>Email</Text>
         <View style={styles.action}>
           <FontAwesome
             name="user-o"
@@ -50,13 +44,13 @@ const SignIn = ({navigation}) => {
             style={styles.icon}
           />
           <TextInput
-            placeholder="Your username..."
+            placeholder="Your email..."
             style={styles.text_input}
-            value={username}
-            onChangeText={(text) => handleChangeUsername(text)}
+            value={email}
+            onChangeText={(text) => handleChangeEmail(text)}
           />
 
-          {checkUsername === true ? (
+          {checkEmail === true ? (
             <Feather
               name="check-circle"
               size={20}

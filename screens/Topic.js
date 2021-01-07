@@ -67,6 +67,7 @@ const Topic = ({route}) => {
         </Text>
       </View>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={formatData(data,numberCols)}
         renderItem={_renderItem}
         style={{flex:1}}
