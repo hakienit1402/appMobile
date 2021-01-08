@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StatusBar, StyleSheet,
   Text,
@@ -8,11 +8,12 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { AuthContext } from '../navigations/AuthProvider';
 const SignIn = ({navigation}) => {
+  const {login,error} = useContext(AuthContext)
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [checkEmail, setCheckEmail] = useState(false);
-  const [checkPassword, setCheckPassword] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const handleChangeEmail = (text) => {
       setEmail(text)
@@ -28,6 +29,10 @@ const SignIn = ({navigation}) => {
   const handleSecureTextEntry = () => {
       setSecureTextEntry(!secureTextEntry)
   };
+  const handleSignIn = () =>{
+      login(email,password)
+      // console.log(email + " - " + password)
+  }
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -35,6 +40,9 @@ const SignIn = ({navigation}) => {
         <Text style={styles.title_header}>Welcome Coder !</Text>
       </View>
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
+          <View style={{justifyContent:'center', alignItems:'center'}}>
+             <Text style={{color:'red', fontSize:15,fontWeight:'400'}}>{error}</Text>
+          </View>
         <Text style={styles.title_footer}>Email</Text>
         <View style={styles.action}>
           <FontAwesome
@@ -95,7 +103,7 @@ const SignIn = ({navigation}) => {
           <LinearGradient colors={['#40FF00', '#39cff2']} style={styles.signIn}>
           <TouchableOpacity
           style={styles.signIn}
-            onPress={() => navigation.navigate('HomeScreen')}>
+            onPress={() => handleSignIn()}>
                 <Text style={[styles.textSign, {color: '#ffffff'}]}>Sign In</Text>
             </TouchableOpacity>
           </LinearGradient>

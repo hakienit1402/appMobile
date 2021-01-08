@@ -1,9 +1,12 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import {View,Text,StyleSheet,StatusBar, ImageBackground,ScrollView,FlatList} from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
 import Language from '../components/Language';
+import {AuthContext} from '../navigations/AuthProvider'
 const Home = ({navigation}) => {
-    const name = "Kien ha"
+    const {user} = useContext(AuthContext)
+
+    const name = 'Kien'
     const language = [{
         id:1,name:"JAVA",image:'https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg'
     },
@@ -14,7 +17,6 @@ const Home = ({navigation}) => {
         id:3,name:'Java Script',image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz_WPyltbAoAxJQ1AJV_jVY4sIhsGQIBLO4Q&usqp=CAU'
     }
 ]
-
     return (
         <View style={styles.container}>
               <StatusBar barStyle="light-content" />

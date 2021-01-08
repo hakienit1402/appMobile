@@ -1,19 +1,18 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/Feather';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import React, { useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
-  Text,
-  Title,
   Avatar,
   Caption,
-  Paragraph,
+  Drawer, Switch, Text,
+  Title,
   TouchableRipple,
-  Switch,
-  Drawer,
-  useTheme,
+  useTheme
 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Feather';
+import { AuthContext } from '../navigations/AuthProvider';
 const DrawerContent = ({navigation}) => {
+  const {logout} = useContext(AuthContext)
   const paperTheme = useTheme();
   return (
     <View style={{flex: 1}}>
@@ -107,7 +106,7 @@ const DrawerContent = ({navigation}) => {
             <Icon name="log-out" color={color} size={size} />
           )}
           label="Sign Out"
-          // onPress={() => {signOut()}}
+          onPress={() => logout()}
         />
       </Drawer.Section>
     </View>
