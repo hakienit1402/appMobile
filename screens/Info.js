@@ -1,11 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useContext} from 'react';
 import {
-  Dimensions, Image, SafeAreaView,
-  ScrollView, StyleSheet, Text,
-  TouchableOpacity, View
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {AuthContext} from '../navigations/AuthProvider';
 const HistoryItems = () => {
   return (
     <View style={styles.history_item}>
@@ -43,6 +49,7 @@ const HistoryItems = () => {
 };
 const Info = () => {
   const navigation = useNavigation();
+  const {user} = useContext(AuthContext);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -59,7 +66,7 @@ const Info = () => {
         <View style={{alignSelf: 'center'}}>
           <View style={styles.profileImage}>
             <Image
-              source={require('../src/assets/avatar.jpg')}
+              source={{uri: `${user.photoUrl}`}}
               style={styles.image}
               resizeMode={'center'}
             />
@@ -69,47 +76,18 @@ const Info = () => {
           </View>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>Ha Kien</Text>
-          <Text style={styles.description}>@Yataome1402</Text>
-          <Text style={styles.editname}>Edit</Text>
+          <Text style={styles.name}>
+            {user.displayName}{' '}
+            <Icon
+              name="edit-3"
+              size={20}
+              color="blue"
+              style={{marginLeft: 8}}
+            />
+          </Text>
+
+          <Text style={styles.description}>{user.email}</Text>
         </View>
-        <View
-          style={{
-            width: '100%',
-            height: 1,
-            backgroundColor: '#D8D8D8',
-            marginVertical: 10,
-          }}
-        />
-        <View style={styles.info}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Giới thiệu</Text>
-          <View style={{flexDirection: 'row', marginVertical: 3}}>
-            <Icon name="mail" size={20} color="black" />
-            <Text style={styles.text_info}>Kien@gmail.com</Text>
-          </View>
-          <View style={{flexDirection: 'row', marginVertical: 3}}>
-            <Icon name="mail" size={20} color="black" />
-            <Text style={styles.text_info}>Kien@gmail.com</Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={{justifyContent: 'center', alignItems: 'center'}}
-          activeOpacity={0.6}>
-          <View
-            style={{
-              width: '60%',
-              height: 30,
-              backgroundColor: '#D8D8D8',
-              marginVertical: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 20,
-            }}>
-            <Text style={{color: 'black', fontSize: 14, fontWeight: 'bold'}}>
-              Chỉnh sửa thông tin
-            </Text>
-          </View>
-        </TouchableOpacity>
         <View
           style={{
             width: '100%',

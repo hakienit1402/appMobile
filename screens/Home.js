@@ -5,8 +5,8 @@ import Language from '../components/Language';
 import {AuthContext} from '../navigations/AuthProvider'
 const Home = ({navigation}) => {
     const {user} = useContext(AuthContext)
-
-    const name = 'Kien'
+    // console.log(user)
+    const name = user.displayName
     const language = [{
         id:1,name:"JAVA",image:'https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg'
     },

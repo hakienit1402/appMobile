@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../navigations/AuthProvider';
 const DrawerContent = ({navigation}) => {
-  const {logout} = useContext(AuthContext)
+  const {logout,user} = useContext(AuthContext)
   const paperTheme = useTheme();
   return (
     <View style={{flex: 1}}>
@@ -28,8 +28,8 @@ const DrawerContent = ({navigation}) => {
                 size={50}
               />
               <View style={{ marginLeft:15, flexDirection: 'column'}}>
-                <Title style={styles.title}>Hà Kiên</Title>
-                <Caption style={styles.caption}>@YataomeIT</Caption>
+                <Title style={styles.title}>{user.displayName}</Title>
+                <Caption style={styles.caption}>{user.email}</Caption>
               </View>
                 </View>
                
