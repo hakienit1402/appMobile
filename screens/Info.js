@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useContext} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import {
   Dimensions,
   Image,
@@ -7,11 +7,10 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {AuthContext} from '../navigations/AuthProvider';
+import { AuthContext } from '../navigations/AuthProvider';
 const HistoryItems = () => {
   return (
     <View style={styles.history_item}>

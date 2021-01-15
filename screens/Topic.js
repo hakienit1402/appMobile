@@ -1,64 +1,86 @@
-import React from 'react';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
   Dimensions,
-  ScrollView,
+  FlatList,
   Image,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import {useNavigation} from '@react-navigation/native'
 const Topic = ({route}) => {
+  const [countTopic, setCountTopic] = useState(0);
   const {language} = route.params;
-  const navigation= useNavigation();
-  const data = [
-    {key: '1'},
-    {key: '2'},
-    {key: '3'},
-    {key: '4'},
-    {key: '5'}
-  ];
+  const navigation = useNavigation();
+  const [topic, setTopic] = useState([]);
+  for (let index = 1; index <= Math.round(countTopic / 10); index++) {
+    topic.push(index);
+  }
+  const handleCountTopic = (language) => {
+    firestore()
+      .collection('questions')
+      .where('language', '==', language)
+      .onSnapshot((data) => {
+        setCountTopic(data.docs.length);
+      });
+  };
+  useEffect(() => {
+    handleCountTopic(language.name);
+  }, []);
+
   const _renderItem = ({item, index}) => {
-      if (item.empty){
-          return (
-          <View style={[styles.containerItem,{backgroundColor:'transparent',elevation:0}]}/>
-          )
-      } else {
-    return (
-      <TouchableOpacity style={styles.containerItem} activeOpacity={0.5} onPress={()=>navigation.navigate('MainScreen',{
-        topic:item
-      })}>
-        <Image
-          source={{uri: language.image}}
-          style={styles.logoItem}
-          resizeMode={'stretch'}
+    if (item.empty) {
+      return (
+        <View
+          style={[
+            styles.containerItem,
+            {backgroundColor: 'transparent', elevation: 0},
+          ]}
         />
-        <View style={styles.content}>
-          <Text style={styles.text_topic}>Đề {item.key}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-}
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          style={styles.containerItem}
+          activeOpacity={0.5}
+          onPress={() =>
+            navigation.navigate('MainScreen', {
+              topic: item,
+              language: language.name,
+              logo:language.logo
+            })
+          }>
+          <Image
+            source={{uri: language.logo}}
+            style={styles.logoItem}
+            resizeMode={'stretch'}
+          />
+          <View style={styles.content}>
+            <Text style={styles.text_topic}>Đề {item}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   };
   const numberCols = 2;
-  const formatData = (data,numberCols) =>{
-      const numberOfRow = Math.floor(data.length/numberCols);
-      let numberLastRow = data.length - (numberOfRow*numberCols)
-      while (numberLastRow !== numberCols && numberLastRow!==0){
-          data.push({key:'blank',empty:true})
-          numberLastRow++
-      }
-      return data
-  }
+  const formatData = (data, numberCols) => {
+    const numberOfRow = Math.floor(data.length / numberCols);
+    let numberLastRow = data.length - numberOfRow * numberCols;
+    while (numberLastRow !== numberCols && numberLastRow !== 0) {
+      data.push({key: 'blank', empty: true});
+      numberLastRow++;
+    }
+    return data;
+  };
   return (
     <View style={styles.container}>
       <View style={styles.language}>
         <Animatable.Image
           animation="bounceIn"
-          source={{uri: language.image}}
+          source={{uri: language.logo}}
           style={styles.logo}
           resizeMode={'stretch'}
         />
@@ -68,9 +90,9 @@ const Topic = ({route}) => {
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={formatData(data,numberCols)}
+        data={formatData(topic, numberCols)}
         renderItem={_renderItem}
-        style={{flex:1}}
+        style={{flex: 1}}
         numColumns={numberCols}
         keyExtractor={(topic, index) => index.toString()}
         // onEndReached

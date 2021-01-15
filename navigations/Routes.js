@@ -5,10 +5,10 @@ import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import {AuthContext} from './AuthProvider';
 import firestore from '@react-native-firebase/firestore';
+import {AppProvider} from '../ContextAPI/AppContext';
 
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
-  console.log(user);
   const [initializing, setInitializing] = useState(true);
   const onAuthStateChanged = (user) => {
     setUser(user);
@@ -19,9 +19,9 @@ const Routes = () => {
         .collection('users')
         .doc(user.uid)
         .onSnapshot((documentSnapshot) => {
-          console.log('User exists: ', documentSnapshot.exists);
+          // console.log('User exists: ', documentSnapshot.exists);
           if (documentSnapshot.exists) {
-            console.log('User data: ', documentSnapshot.data());
+            // console.log('User data: ', documentSnapshot.data());
             setUser(documentSnapshot.data());
           } else {
             const dataUser = [
@@ -46,7 +46,7 @@ const Routes = () => {
                 stateLogin: true,
               })
               .then(() => {
-                console.log('User added!');
+                // console.log('User added!');
               });
             setUser(dataUser);
           }
@@ -61,7 +61,13 @@ const Routes = () => {
   if (initializing) return null;
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {user ? (
+        <AppProvider>
+          <AppStack />
+        </AppProvider>
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 };

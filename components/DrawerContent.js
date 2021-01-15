@@ -34,7 +34,7 @@ const DrawerContent = ({navigation}) => {
                 </View>
                
                 
-              <View style={{}}>
+              <View >
                   <Icon name='chevron-left' size={40} color={'black'} onPress={()=>navigation.closeDrawer()}/>
               </View>
             </View>

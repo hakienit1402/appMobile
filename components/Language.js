@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {Text, Image, View, StyleSheet, Alert, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native'
+import { AppContext } from '../ContextAPI/AppContext';
 const Language = ({item}) => {
-const image = item.image
+const image = item.logo
 const navigation= useNavigation();
+// const {handleCountTopic,countTopic} = useContext(AppContext);
 const goTopic = (item) =>{
-  // console.log(item)
+  // handleCountTopic(item.name)
   navigation.navigate('TopicScreen',{
-    language:item
+    language:item,
+    // countTopic:countTopic
   })
 }
   return (

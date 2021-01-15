@@ -61,16 +61,16 @@ const Main = ({route}) => {
       key: 'D',
     },
   ];
-  useEffect(() => {
-    fadeAnim.addListener(({value}) => {
-      setPercent(parseInt(value, 10));
-    });
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 5000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
+  // useEffect(() => {
+  //   fadeAnim.addListener(({value}) => {
+  //     setPercent(parseInt(value, 10));
+  //   });
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 0,
+  //     duration: 5000,
+  //     useNativeDriver: true,
+  //   }).start();
+  // }, []);
   const reloadProgess = () => {
     fadeAnim.setValue(100)
     setCount(Math.floor((Math.random() * 10)))

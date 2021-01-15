@@ -1,28 +1,28 @@
-import React,{useContext, useState} from 'react'
-import {View,Text,StyleSheet,StatusBar, ImageBackground,ScrollView,FlatList} from 'react-native'
+import firestore from '@react-native-firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
+import { Dimensions, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Language from '../components/Language';
-import {AuthContext} from '../navigations/AuthProvider'
+import { AuthContext } from '../navigations/AuthProvider';
+const {width,height} = Dimensions.get('window')
 const Home = ({navigation}) => {
     const {user} = useContext(AuthContext)
     // console.log(user)
     const name = user.displayName
-    const language = [{
-        id:1,name:"JAVA",image:'https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg'
-    },
-    {
-        id:2,name:'C#',image:'https://pngimage.net/wp-content/uploads/2018/05/eps-to-png-7.png'
-    },
-    {
-        id:3,name:'Java Script',image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz_WPyltbAoAxJQ1AJV_jVY4sIhsGQIBLO4Q&usqp=CAU'
-    }
-]
+    const [languages,setLanguages] = useState([]);
+    useEffect(() => {
+        firestore().collection('languages').onSnapshot((data)=> { 
+            setLanguages(data.docs.map(doc => ({
+              ...doc.data(),
+            })))
+          })
+    }, [])
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
               <StatusBar barStyle="light-content" />
                 <ImageBackground
                source={require('../src/assets/home.png')}
-               style={{width:'100%',height:250}}
+               style={{width:'100%',height:height*0.35}}
                imageStyle={{borderBottomRightRadius:60}}
                resizeMode={'stretch'}
                 >
@@ -34,20 +34,20 @@ const Home = ({navigation}) => {
                     <Feather name="menu" size={30} color="#ffffff" style={styles.menuIcon} onPress={()=>navigation.toggleDrawer()}/>
                     {/* <Feather name="settings" size={30} color="#ffffff" style={styles.settingIcon} /> */}
                 </ImageBackground>
-                <View>
+                <View height={height*0.65} style={{flexDirection:'column'}}>
                     <View style={{padding:20}}>
                         <Text style={{fontSize:22,fontWeight:'bold'}}>Choose language</Text>
                     </View>
                     <View style={styles.button}>
-                        {language.map((item)=>(
-                             <View style={styles.language} key={item.id}>
+                        {languages.map((item,index)=>(
+                             <View style={styles.language} key={index}>
                             <Language item={item} />
                             </View>
                         ))}
                         
                     </View>
                 </View>
-        </View>
+        </ScrollView>
     )
 }
 var styles = StyleSheet.create({
@@ -61,15 +61,14 @@ var styles = StyleSheet.create({
         top:0,
         right:0,
         left:0,
-        height:250,
+        height:height*0.35,
         backgroundColor:'#0080FF',
         opacity:0.3,
-        borderBottomRightRadius:65
+        borderBottomRightRadius:60
     },
     headerContainer:{
-        paddingTop:130,
+        paddingTop:height*0.2,
         paddingLeft:20,
-        
     },
     name:{
         fontWeight:'bold',
@@ -109,7 +108,7 @@ var styles = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:'#FFFFFF',
         marginBottom:20,
-        height:80,
+        height:height*0.13,
         width:"100%",
         alignItems:'center',
         borderRadius:10,

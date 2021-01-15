@@ -7,6 +7,7 @@ import Topic from '../screens/Topic';
 import Splash from '../screens/Splash';
 import Main from '../screens/Main';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import AppPro from '../screens/AppPro';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -33,9 +34,16 @@ const HoomStackScreen = () => {
         component={Topic}
         options={({route}) => ({title: route.params.language.name})}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="MainScreen"
         component={Main}
+        options={{
+          headerShown: false,
+        }}
+      /> */}
+       <HomeStack.Screen
+        name="MainScreen"
+        component={AppPro}
         options={{
           headerShown: false,
         }}
