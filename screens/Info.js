@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { Fragment, useContext, useEffect,useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 import {
   Dimensions,
   Image,
@@ -11,44 +12,20 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../navigations/AuthProvider';
-const HistoryItems = () => {
-  return (
-    <View style={styles.history_item}>
-      <View style={{top: 8, right: 20, position: 'absolute'}}>
-        <Text style={{fontSize: 18}}>20/12/2020</Text>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          paddingHorizontal: 20,
-          alignItems: 'center',
-        }}>
-        <Image
-          source={require('../src/assets/java.png')}
-          resizeMode={'stretch'}
-          style={{width: 80, height: 80}}
-        />
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 20,
-          }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Đề 1</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>7/10</Text>
-        </View>
-      </View>
-      <View style={{bottom: 6, right: 40, position: 'absolute'}}>
-        <Text style={{fontSize: 16, color: 'blue'}}>Làm lại</Text>
-      </View>
-    </View>
-  );
-};
+
 const Info = () => {
   const navigation = useNavigation();
-  const {user} = useContext(AuthContext);
+  const {userData} = useContext(AuthContext);
+  const [histories,setHisotries]= useState([])
+  useEffect(() => {
+    firestore().collection('users').doc(userData.uid).collection('histories').onSnapshot((data)=> { 
+      setHisotries(data.docs.map(doc => ({
+        ...doc.data(),
+      })))
+    })
+  }, [])
+  console.log(userData)
+  console.log('lich su: '+histories)
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -65,7 +42,7 @@ const Info = () => {
         <View style={{alignSelf: 'center'}}>
           <View style={styles.profileImage}>
             <Image
-              source={{uri: `${user.photoUrl}`}}
+              source={{uri: `${userData.photoUrl}`}}
               style={styles.image}
               resizeMode={'center'}
             />
@@ -76,7 +53,7 @@ const Info = () => {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.name}>
-            {user.displayName}{' '}
+            {userData.displayName}
             <Icon
               name="edit-3"
               size={20}
@@ -85,7 +62,7 @@ const Info = () => {
             />
           </Text>
 
-          <Text style={styles.description}>{user.email}</Text>
+          <Text style={styles.description}>{userData.email}</Text>
         </View>
         <View
           style={{
@@ -98,14 +75,50 @@ const Info = () => {
         <View style={styles.info}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>Lịch sử</Text>
           <View style={styles.history_container}>
-            <HistoryItems />
-            <HistoryItems />
-            <HistoryItems />
-            <HistoryItems />
+            {histories.map((his,index)=>{
+              <Fragment key={index}>
+                <HistoryItems history={his}/>
+              </Fragment>
+            })}
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+};
+const HistoryItems = ({history}) => {
+  return (
+    <View style={styles.history_item}>
+      <View style={{top: 8, right: 20, position: 'absolute'}}>
+        <Text style={{fontSize: 18}}>{history.date}</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          paddingHorizontal: 20,
+          alignItems: 'center',
+        }}>
+        <Image
+          source={{uri:history.logoLanguage}}
+          resizeMode={'stretch'}
+          style={{width: 80, height: 80}}
+        />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>{history.topic}</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>{history.score}/10</Text>
+        </View>
+      </View>
+      <View style={{bottom: 6, right: 40, position: 'absolute'}}>
+        <Text style={{fontSize: 16, color: 'blue'}}>Làm lại</Text>
+      </View>
+    </View>
   );
 };
 const {height} = Dimensions.get('screen');

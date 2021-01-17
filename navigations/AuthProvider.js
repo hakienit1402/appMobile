@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null);
+  const [userData,setUserData] = useState([])
   const [error, setError] = useState('');
   const [loading,setLoading] = useState(false)
   const login = async (email, password) => {
@@ -38,6 +39,8 @@ export const AuthProvider = ({children}) => {
         login,
         register,
         logout,
+        userData,
+        setUserData
       }}>
       {children}
     </AuthContext.Provider>

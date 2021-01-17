@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import React, {Fragment, useContext, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -8,25 +8,33 @@ import {
   StyleSheet,
   Text,
   View,
+  Animated,
+  Alert,
+  Easing
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import Animated from 'react-native-reanimated';
+// import Animated from 'react-native-reanimated';
 import Feather from 'react-native-vector-icons/Feather';
 import End from '../components/End';
+import Process from '../components/Process';
 import QuestionSlide from '../components/QuestionSlide';
 import Start from '../components/Start';
-
+import { AuthContext } from '../navigations/AuthProvider';
+import Moment from 'moment';
 const AppPro = ({route}) => {
-  const [percent, setPercent] = useState(100);
+  // const [percent, setPercent] = useState(100);
+  const {userData} = useContext(AuthContext);
   const {language, topic, logo} = route.params;
   const [visible, setVisible] = useState(true);
   const [visibleEnd, setVisibleEnd] = useState(false);
   const [end, setEnd] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [multiAnswers,setMultiAnswers] = useState([])
+  const [multiAnswers, setMultiAnswers] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
+  // const fadeAnim = new Animated.Value(100);
+  const [isStart,setIsStart]= useState(false)
   useEffect(() => {
     firestore()
       .collection('questions')
@@ -40,25 +48,26 @@ const AppPro = ({route}) => {
         );
       });
   }, []);
+
   const handleStart = () => {
     console.log('start');
+    setIsStart(true)
     setVisible(false);
     questions.map((question, index) => {
       if (question.multiOption) {
         multiAnswers.push({
-          index:index+1,
-          question:question.question,
+          index: index + 1,
+          question: question.question,
           correct_One: question.answerOne,
           correct_Two: question.answerTwo,
-        })
-      }else {
+        });
+      } else {
         answers.push({
           index: index + 1,
           multiOption: question.multiOption,
-          answer:question.answerOne
+          answer: question.answerOne,
         });
       }
-     
     });
   };
   const scroll = useRef(null);
@@ -66,47 +75,57 @@ const AppPro = ({route}) => {
   const checkExist = (data, index) => {
     return data.findIndex((e) => e.index === index);
   };
-  // console.log(answers)
   const checkAnswer = () => {
     answers.map((answer) => {
       const countAnswer = userAnswers.filter((e) => e.index === answer.index);
-      if (countAnswer.length===1) {
-        if (countAnswer[0].answer === answer.answer) setScore(currscore => currscore+1)
+      if (countAnswer.length === 1) {
+        if (countAnswer[0].answer === answer.answer)
+          setScore((currscore) => currscore + 1);
       }
     });
   };
-  const checkMultiAnswer = ()=>{
-    console.log(userAnswers)
-    multiAnswers.map((multiAnswer)=>{
-      const countAnswer = userAnswers.filter((e) => e.index === multiAnswer.index);
-      console.log(countAnswer)
-      if(countAnswer.length===2){
-          let count = 0;
-          countAnswer.map((ca)=>{
-            if (ca.answer===multiAnswer.correct_One||ca.answer===multiAnswer.correct_Two){
-              count=count+1;
-            }
-          })
-          if (count===2) {
-            setScore(currscore => currscore+1)
+  const checkMultiAnswer = () => {
+    multiAnswers.map((multiAnswer) => {
+      const countAnswer = userAnswers.filter(
+        (e) => e.index === multiAnswer.index,
+      );
+      console.log(countAnswer);
+      if (countAnswer.length === 2) {
+        let count = 0;
+        countAnswer.map((ca) => {
+          if (
+            ca.answer === multiAnswer.correct_One ||
+            ca.answer === multiAnswer.correct_Two
+          ) {
+            count = count + 1;
           }
+        });
+        if (count === 2) {
+          setScore((currscore) => currscore + 1);
+        }
       }
-    })
-  }
-  const handleNextOrSubmit = async (index) => {
-    if (index === 10) {
-      await checkAnswer();
-      await checkMultiAnswer();
-      setVisibleEnd(true);
-    } else {
-      scroll.current.scrollTo({x: width * index, animated: true});
-    }
+    });
   };
-  const handleView = () => {
+  const handleNext = (index)=>{
+    scroll.current.scrollTo({x: width * index, animated: true});
+  }
+  const countScore = async () => {
+    await checkMultiAnswer();
+    await checkAnswer();
+  }
+  const handleSubmit = async ()=>{
+    await countScore();
+    setTimeout(() => {
+      setVisibleEnd(true);
+    }, 0);
+    setIsStart(false)
+  }
+  const handleView =  () => {
     setVisibleEnd(false);
     setEnd(true);
+    setIsStart(false)
   };
-
+  
   const onSelected = (index, answer) => {
     const answerIndex = userAnswers?.findIndex((e) => e.answer === answer);
     const Index = userAnswers?.findIndex((e) => e.index === index);
@@ -124,9 +143,26 @@ const AppPro = ({route}) => {
       scroll.current.scrollTo({x: width * index, animated: true});
     }
   };
+  const setEndProcess = async () => {
+    await countScore();
+    setTimeout(() => {
+      setVisibleEnd(true);
+      setIsStart(false)
+    }, 0);
+    
+  }
 
+  const addHistory = (score) => {
+    const history = {
+      date:Moment(new Date()).format('DD/MM/YYYY'),
+      logoLanguage:logo,
+      topic:topic,
+      score:score
+    }
+    firestore().collection('users').doc(userData.uid).collection('histories').add(history)
+  }
   return (
-    <SafeAreaView flex={1}>
+    <View flex={1}>
       <StatusBar barStyle="light-content" />
       <Animatable.View animation="bounceIn">
         <Start
@@ -137,7 +173,13 @@ const AppPro = ({route}) => {
         />
       </Animatable.View>
       <Animatable.View animation="bounceIn">
-        <End logo={logo} handleView={handleView} visible={visibleEnd} score={score}/>
+        <End
+          logo={logo}
+          handleView={handleView}
+          visible={visibleEnd}
+          score={score}
+          addHistory={addHistory}
+        />
       </Animatable.View>
       <View style={styles.container}>
         <View
@@ -162,36 +204,29 @@ const AppPro = ({route}) => {
             <Text style={styles.title}>{language}</Text>
             <Text style={styles.titleTopic}>Đề {topic}</Text>
           </View>
-          <View style={{marginLeft: 40, marginRight: 40}}>
-            <View style={styles.progessbar}>
-              <Animated.View
-                style={[
-                  styles.progess_inner,
-                  {
-                    width: `${percent}%`,
-                  },
-                ]}
-              />
+            <View style={{marginLeft: 40, marginRight: 40}}>
+              {isStart?<Process isStart={isStart} setEndProcess={setEndProcess}/>:null}
             </View>
-          </View>
         </View>
         <View height={height * 0.9}>
           <ScrollView
             ref={scroll}
             scrollEnabled={true}
-            pagingEnabled={true}
+            // pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             horizontal
             snapToInterval={width}
             decelerationRate="fast"
             scrollEventThrottle={16}
-            bounces={false}>
+            bounces={false}
+            >
             {questions.map((question, index) => (
               <Fragment key={index}>
                 <QuestionSlide
                   question={question}
                   index={index + 1}
-                  handleNextOrSubmit={handleNextOrSubmit}
+                  handleNext={handleNext}
+                  handleSubmit={handleSubmit}
                   onSelected={onSelected}
                   end={end}
                 />
@@ -200,7 +235,7 @@ const AppPro = ({route}) => {
           </ScrollView>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 const {width, height} = Dimensions.get('window');
@@ -233,6 +268,8 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 3,
     borderRadius: 40,
+    borderColor: 'green',
+    borderWidth: 1,
   },
   progess_inner: {
     backgroundColor: 'red',

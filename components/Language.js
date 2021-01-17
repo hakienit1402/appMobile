@@ -10,7 +10,6 @@ const goTopic = (item) =>{
   // handleCountTopic(item.name)
   navigation.navigate('TopicScreen',{
     language:item,
-    // countTopic:countTopic
   })
 }
   return (

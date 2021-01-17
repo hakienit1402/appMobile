@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../navigations/AuthProvider';
 const DrawerContent = ({navigation}) => {
-  const {logout,user} = useContext(AuthContext)
+  const {logout,userData} = useContext(AuthContext)
   const paperTheme = useTheme();
   return (
     <View style={{flex: 1}}>
@@ -28,8 +28,8 @@ const DrawerContent = ({navigation}) => {
                 size={50}
               />
               <View style={{ marginLeft:15, flexDirection: 'column'}}>
-                <Title style={styles.title}>{user.displayName}</Title>
-                <Caption style={styles.caption}>{user.email}</Caption>
+                <Title style={styles.title}>{userData.displayName}</Title>
+                <Caption style={styles.caption}>{userData.email}</Caption>
               </View>
                 </View>
                
@@ -64,7 +64,7 @@ const DrawerContent = ({navigation}) => {
               )}
               label="Bookmarks"
               onPress={() => {
-                navigation.navigate('BookmarkScreen');
+                // navigation.navigate('BookmarkScreen');
               }}
             />
             <DrawerItem
@@ -73,7 +73,7 @@ const DrawerContent = ({navigation}) => {
               )}
               label="Settings"
               onPress={() => {
-                navigation.navigate('SettingsScreen');
+                // navigation.navigate('SettingsScreen');
               }}
             />
             <DrawerItem
@@ -82,7 +82,7 @@ const DrawerContent = ({navigation}) => {
               )}
               label="About us"
               onPress={() => {
-                navigation.navigate('SupportScreen');
+                // navigation.navigate('SupportScreen');
               }}
             />
           </Drawer.Section>

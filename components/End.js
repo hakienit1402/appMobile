@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 const {height, width} = Dimensions.get('window');
-const End = ({logo, handleView, visible, score}) => {
+const End = ({logo, handleView, visible, score,addHistory}) => {
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -47,7 +47,7 @@ const End = ({logo, handleView, visible, score}) => {
             )}
             <Text style={styles.text}>{score}/10</Text>
             {score < 5 ? (
-              <Text style={styles.text}>Ngu vãi lolllll</Text>
+              <Text style={styles.text}>Thanks you for your effort!</Text>
             ) : (
               <Text style={styles.text}>Your quiz completed successfully!</Text>
             )}
@@ -65,6 +65,19 @@ const End = ({logo, handleView, visible, score}) => {
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
+            <LinearGradient
+              colors={['#40FF00', '#39cff2']}
+              style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => addHistory(score)}>
+                <Text
+                  style={{color: '#ffffff', fontSize: 19, fontWeight: 'bold'}}>
+                  SAVE
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
+            
           </View>
         </View>
       </View>

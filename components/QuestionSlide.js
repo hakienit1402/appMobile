@@ -10,7 +10,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 const {width, height} = Dimensions.get('screen');
-const QuestionSlide = ({question, index, handleNextOrSubmit, onSelected,end}) => {
+const QuestionSlide = ({question, index, handleNext,handleSubmit, onSelected,end}) => {
   const [checkA, setCheckA] = useState(false);
   const [checkB, setCheckB] = useState(false);
   const [checkC, setCheckC] = useState(false);
@@ -41,7 +41,10 @@ const QuestionSlide = ({question, index, handleNextOrSubmit, onSelected,end}) =>
     } 
   };
   const handleClickButton = (index)=>{
-    handleNextOrSubmit(index)
+    if (index===10){
+      handleSubmit()
+    } else handleNext(index)
+    
   }
   const handleSelect = (index, option) => {
     onSelected(index, option);

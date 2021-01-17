@@ -6,9 +6,9 @@ import Language from '../components/Language';
 import { AuthContext } from '../navigations/AuthProvider';
 const {width,height} = Dimensions.get('window')
 const Home = ({navigation}) => {
-    const {user} = useContext(AuthContext)
+    const {user,userData} = useContext(AuthContext)
     // console.log(user)
-    const name = user.displayName
+    const name = userData.displayName
     const [languages,setLanguages] = useState([]);
     useEffect(() => {
         firestore().collection('languages').onSnapshot((data)=> { 
@@ -17,6 +17,7 @@ const Home = ({navigation}) => {
             })))
           })
     }, [])
+    
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
               <StatusBar barStyle="light-content" />

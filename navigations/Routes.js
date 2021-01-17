@@ -8,51 +8,47 @@ import firestore from '@react-native-firebase/firestore';
 import {AppProvider} from '../ContextAPI/AppContext';
 
 const Routes = () => {
-  const {user, setUser} = useContext(AuthContext);
+  const {user, setUser,setUserData} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
   const onAuthStateChanged = (user) => {
     setUser(user);
+    if (initializing) setInitializing(false);
     if (user === null) {
-      setUser(null);
+      setUserData([]);
     } else {
       firestore()
         .collection('users')
         .doc(user.uid)
         .onSnapshot((documentSnapshot) => {
-          // console.log('User exists: ', documentSnapshot.exists);
           if (documentSnapshot.exists) {
-            // console.log('User data: ', documentSnapshot.data());
-            setUser(documentSnapshot.data());
+            setUserData(documentSnapshot.data());
           } else {
-            const dataUser = [
-              {
-                displayName: 'New member',
-                photoUrl:
-                  'https://lh3.googleusercontent.com/proxy/r66C8cR3ZcLhfxiYy5TPK4zSZh5oe2gm622RQFqd4E2zPqce7joNSzJ4DyozALK0r9VxS84m8fxWq0CrQmfaVQV2h2kYsjuEmCcXDbLTJG6HtlAmTAhbRjdqWE09b4Eqna85EGl3JGs5SAiQ',
-                uid: user.uid,
-                stateExam: false,
-                stateLogin: true,
-              },
-            ];
+            const tmpdata = {
+              uid:user.uid,
+              email: user.email,
+              displayName: 'New member',
+              photoUrl:
+                'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png',
+              stateExam: false,
+              stateLogin: true,
+            }
             firestore()
               .collection('users')
               .doc(user.uid)
               .set({
+                uid:user.uid,
                 email: user.email,
                 displayName: 'New member',
                 photoUrl:
-                  'https://lh3.googleusercontent.com/proxy/r66C8cR3ZcLhfxiYy5TPK4zSZh5oe2gm622RQFqd4E2zPqce7joNSzJ4DyozALK0r9VxS84m8fxWq0CrQmfaVQV2h2kYsjuEmCcXDbLTJG6HtlAmTAhbRjdqWE09b4Eqna85EGl3JGs5SAiQ',
+                'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png',
                 stateExam: false,
                 stateLogin: true,
               })
-              .then(() => {
-                // console.log('User added!');
-              });
-            setUser(dataUser);
+              setUserData(tmpdata);
           }
         });
     }
-    if (initializing) setInitializing(false);
+    
   };
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
