@@ -15,6 +15,7 @@ const Start = ({logo, language,handleStart,visible}) => {
             />
           </View>
           <View style={styles.contentText}>
+    
     <Text style={{fontSize:30,fontWeight:'bold',color:'green',marginBottom:height*0.04}}>Are you ready!</Text>
     <Text style={styles.text}>Quiz has 10 questions about {language}</Text>
     <Text style={styles.text}>You have 10 mins to complete</Text>
