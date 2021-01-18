@@ -1,26 +1,23 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import firestore from '@react-native-firebase/firestore';
-import { AuthContext } from "../navigations/AuthProvider";
-export const AppContext = createContext();
-export const AppProvider = ({children}) =>{
-    // const {user} =  useContext(AuthContext)
-    // const [questions,setQuestions]= useState([]); 
-    // const [userData,setUserData]=useState([])
+// import React, { createContext, useContext, useEffect, useState } from "react";
+// import firestore from '@react-native-firebase/firestore';
+// import { AuthContext } from "../navigations/AuthProvider";
+// export const AppContext = createContext();
+// export const AppProvider = ({children}) =>{
+//     const {userData} = useContext(AuthContext)
+//     const [userPhotoUrl,setUserPhotoUrl] = useState('');
+//     const [userDisplayName,setUserDisplayName] = useState(userData?userData.displayName:'');
+    
+    
+    
+//     return (
+//         <AppContext.Provider
+//         value={{
+//             userDisplayName,setUserDisplayName,
+//             userPhotoUrl,setUserPhotoUrl,
 
-    // useEffect(() => {
-    //    firestore().collection('users').doc(user.uid).onSnapshot((data)=> { 
-    //     setUserData(data.docs.map(doc => ({
-    //       ...doc.data(),
-    //     })))
-    //   })
-    // }, [user])
-    return (
-        <AppContext.Provider
-        value={{
-            // userData
-        }}
-        >
-            {children}
-        </AppContext.Provider>
-    )
-}
+//         }}
+//         >
+//             {children}
+//         </AppContext.Provider>
+//     )
+// }

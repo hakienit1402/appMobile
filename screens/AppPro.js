@@ -1,16 +1,15 @@
 import firestore from '@react-native-firebase/firestore';
-import React, {Fragment, useContext, useEffect, useRef, useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import Moment from 'moment';
+import React, { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
-  SafeAreaView,
+
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  View,
-  Animated,
-  Alert,
-  Easing
+  View
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 // import Animated from 'react-native-reanimated';
@@ -20,8 +19,8 @@ import Process from '../components/Process';
 import QuestionSlide from '../components/QuestionSlide';
 import Start from '../components/Start';
 import { AuthContext } from '../navigations/AuthProvider';
-import Moment from 'moment';
 const AppPro = ({route}) => {
+  const navigation = useNavigation();
   // const [percent, setPercent] = useState(100);
   const {userData} = useContext(AuthContext);
   const {language, topic, logo} = route.params;
@@ -34,7 +33,7 @@ const AppPro = ({route}) => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   // const fadeAnim = new Animated.Value(100);
-  const [isStart,setIsStart]= useState(false)
+  const [isStart, setIsStart] = useState(false);
   useEffect(() => {
     firestore()
       .collection('questions')
@@ -51,7 +50,7 @@ const AppPro = ({route}) => {
 
   const handleStart = () => {
     console.log('start');
-    setIsStart(true)
+    setIsStart(true);
     setVisible(false);
     questions.map((question, index) => {
       if (question.multiOption) {
@@ -72,9 +71,9 @@ const AppPro = ({route}) => {
   };
   const scroll = useRef(null);
 
-  const checkExist = (data, index) => {
-    return data.findIndex((e) => e.index === index);
-  };
+  // const checkExist = (data, index) => {
+  //   return data.findIndex((e) => e.index === index);
+  // };
   const checkAnswer = () => {
     answers.map((answer) => {
       const countAnswer = userAnswers.filter((e) => e.index === answer.index);
@@ -106,29 +105,44 @@ const AppPro = ({route}) => {
       }
     });
   };
-  const handleNext = (index)=>{
+  const handleNext = (index) => {
     scroll.current.scrollTo({x: width * index, animated: true});
-  }
+  };
   const countScore = async () => {
     await checkMultiAnswer();
     await checkAnswer();
-  }
-  const handleSubmit = async ()=>{
+  };
+  const handleSubmit = async () => {
     await countScore();
+    setIsStart(false);
     setTimeout(() => {
       setVisibleEnd(true);
     }, 0);
-    setIsStart(false)
-  }
-  const handleView =  () => {
+    
+  };
+  const handleView = (score) => {
     setVisibleEnd(false);
     setEnd(true);
-    setIsStart(false)
+    setIsStart(false);
+    setTimeout(() => {
+      // addHistory(score)
+      // const timestamp = firestore.FieldValue.serverTimestamp()
+      firestore()
+        .collection('histories')
+        .add({
+          userId: userData.uid,
+          // createdAt: timestamp,
+          date: Moment(new Date()).format('DD/MM/YYYY HH:mm:ss'),
+          logoLanguage: logo,
+          topic: topic,
+          score: score,
+        });
+    }, 0);
   };
-  
+
   const onSelected = (index, answer) => {
     const answerIndex = userAnswers?.findIndex((e) => e.answer === answer);
-    const Index = userAnswers?.findIndex((e) => e.index === index);
+
     if (answerIndex !== -1) {
       userAnswers.splice(answerIndex, 1);
     } else {
@@ -142,25 +156,28 @@ const AppPro = ({route}) => {
     if (questions[index - 1].multiOption === false) {
       scroll.current.scrollTo({x: width * index, animated: true});
     }
+    const dataIndex = userAnswers?.filter((e) => e.index === index);
+    if (dataIndex.length >= 1) {
+      scroll.current.scrollTo({x: width * index, animated: true});
+    }
   };
   const setEndProcess = async () => {
     await countScore();
     setTimeout(() => {
       setVisibleEnd(true);
-      setIsStart(false)
+      setIsStart(false);
     }, 0);
-    
-  }
+  };
 
-  const addHistory = (score) => {
-    const history = {
-      date:Moment(new Date()).format('DD/MM/YYYY'),
-      logoLanguage:logo,
-      topic:topic,
-      score:score
-    }
-    firestore().collection('users').doc(userData.uid).collection('histories').add(history)
-  }
+  // const addHistory = (score) => {
+  //   firestore().collection('histories').add({
+  //     userId:userData.uid,
+  //     date:Moment(new Date()).format('DD/MM/YYYY'),
+  //     logoLanguage:logo,
+  //     topic:topic,
+  //     score:score
+  //   })
+  // }
   return (
     <View flex={1}>
       <StatusBar barStyle="light-content" />
@@ -178,7 +195,7 @@ const AppPro = ({route}) => {
           handleView={handleView}
           visible={visibleEnd}
           score={score}
-          addHistory={addHistory}
+          // addHistory={addHistory}
         />
       </Animatable.View>
       <View style={styles.container}>
@@ -200,13 +217,16 @@ const AppPro = ({route}) => {
               size={35}
               color={'green'}
               style={{position: 'absolute', left: 0}}
+              onPress={() => navigation.goBack()}
             />
             <Text style={styles.title}>{language}</Text>
             <Text style={styles.titleTopic}>Đề {topic}</Text>
           </View>
-            <View style={{marginLeft: 40, marginRight: 40}}>
-              {isStart?<Process isStart={isStart} setEndProcess={setEndProcess}/>:null}
-            </View>
+          <View style={{marginLeft: 40, marginRight: 40}}>
+            {isStart ? (
+              <Process isStart={isStart} setEndProcess={setEndProcess} />
+            ) : null}
+          </View>
         </View>
         <View height={height * 0.9}>
           <ScrollView
@@ -218,8 +238,7 @@ const AppPro = ({route}) => {
             snapToInterval={width}
             decelerationRate="fast"
             scrollEventThrottle={16}
-            bounces={false}
-            >
+            bounces={false}>
             {questions.map((question, index) => (
               <Fragment key={index}>
                 <QuestionSlide

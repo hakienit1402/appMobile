@@ -1,8 +1,11 @@
 import React, { useContext, useState } from 'react';
 import {
-  StatusBar, StyleSheet,
+  StatusBar,
+  StyleSheet,
   Text,
-  TextInput, TouchableOpacity, View
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -10,13 +13,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthContext } from '../navigations/AuthProvider';
 const SignIn = ({navigation}) => {
-  const {login,error} = useContext(AuthContext)
+  const {login, error} = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [checkEmail, setCheckEmail] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const handleChangeEmail = (text) => {
-      setEmail(text)
+    setEmail(text);
     if (text.length !== 0) {
       setCheckEmail(true);
     } else {
@@ -27,12 +30,12 @@ const SignIn = ({navigation}) => {
     setPassword(text);
   };
   const handleSecureTextEntry = () => {
-      setSecureTextEntry(!secureTextEntry)
+    setSecureTextEntry(!secureTextEntry);
   };
-  const handleSignIn = () =>{
-      login(email,password)
-      // console.log(email + " - " + password)
-  }
+  const handleSignIn = () => {
+    login(email, password);
+    // console.log(email + " - " + password)
+  };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -40,9 +43,11 @@ const SignIn = ({navigation}) => {
         <Text style={styles.title_header}>Welcome Coder !</Text>
       </View>
       <Animatable.View style={styles.footer} animation="fadeInUpBig">
-          <View style={{justifyContent:'center', alignItems:'center'}}>
-             <Text style={{color:'red', fontSize:15,fontWeight:'400'}}>{error}</Text>
-          </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{color: 'red', fontSize: 15, fontWeight: '400'}}>
+            {error}
+          </Text>
+        </View>
         <Text style={styles.title_footer}>Email</Text>
         <View style={styles.action}>
           <FontAwesome
@@ -70,21 +75,22 @@ const SignIn = ({navigation}) => {
         <Text style={styles.title_footer}>Password</Text>
         <View style={styles.action}>
           <Feather name="lock" size={20} color="#0B610B" style={styles.icon} />
-          {secureTextEntry?
-           <TextInput
-           placeholder="Your password..."
-           secureTextEntry={true}
-           value={password}
-           style={styles.text_input}
-           onChangeText={(text) => handleChangePassword(text)}
-         />
-          : <TextInput
-          placeholder="Your password..."
-          value={password}
-          style={styles.text_input}
-          onChangeText={(text) => handleChangePassword(text)}
-        />
-          }
+          {secureTextEntry ? (
+            <TextInput
+              placeholder="Your password..."
+              secureTextEntry={true}
+              value={password}
+              style={styles.text_input}
+              onChangeText={(text) => handleChangePassword(text)}
+            />
+          ) : (
+            <TextInput
+              placeholder="Your password..."
+              value={password}
+              style={styles.text_input}
+              onChangeText={(text) => handleChangePassword(text)}
+            />
+          )}
           <TouchableOpacity onPress={() => handleSecureTextEntry()}>
             {secureTextEntry ? (
               <Feather
@@ -101,14 +107,14 @@ const SignIn = ({navigation}) => {
         <Text style={styles.text_forgot}>Forgot password?</Text>
         <View style={styles.button}>
           <LinearGradient colors={['#40FF00', '#39cff2']} style={styles.signIn}>
-          <TouchableOpacity
-          style={styles.signIn}
-            onPress={() => handleSignIn()}>
-                <Text style={[styles.textSign, {color: '#ffffff'}]}>Sign In</Text>
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() => handleSignIn()}>
+              <Text style={[styles.textSign, {color: '#ffffff'}]}>Sign In</Text>
             </TouchableOpacity>
           </LinearGradient>
           <TouchableOpacity
-            onPress={() =>navigation.navigate('SignUpScreen')}
+            onPress={() => navigation.navigate('SignUpScreen')}
             style={[
               styles.signIn,
               {borderColor: '#0B610B', borderWidth: 1, marginTop: 15},

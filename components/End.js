@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 const {height, width} = Dimensions.get('window');
-const End = ({logo, handleView, visible, score,addHistory}) => {
+const End = ({logo, handleView, visible, score}) => {
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -58,22 +58,10 @@ const End = ({logo, handleView, visible, score,addHistory}) => {
               style={styles.button}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleView()}>
+                onPress={() => handleView(score)}>
                 <Text
                   style={{color: '#ffffff', fontSize: 19, fontWeight: 'bold'}}>
                   VIEW
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient>
-            <LinearGradient
-              colors={['#40FF00', '#39cff2']}
-              style={styles.button}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => addHistory(score)}>
-                <Text
-                  style={{color: '#ffffff', fontSize: 19, fontWeight: 'bold'}}>
-                  SAVE
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
