@@ -12,8 +12,12 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../navigations/AuthProvider';
 const DrawerContent = ({navigation}) => {
-  const {logout,userData} = useContext(AuthContext)
+  const {logout,userData,updateStateLogOut} = useContext(AuthContext)
   const paperTheme = useTheme();
+  const handleLogout = (uid) =>{
+    logout()
+    updateStateLogOut(uid)
+  }
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView>
@@ -106,7 +110,7 @@ const DrawerContent = ({navigation}) => {
             <Icon name="log-out" color={color} size={size} />
           )}
           label="Sign Out"
-          onPress={() => logout()}
+          onPress={() => handleLogout(userData.uid)}
         />
       </Drawer.Section>
     </View>

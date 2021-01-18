@@ -7,7 +7,7 @@ import { AuthContext } from './AuthProvider';
 import AuthStack from './AuthStack';
 
 const Routes = () => {
-  const {user, setUser, setUserData} = useContext(AuthContext);
+  const {user, setUser, setUserData,updateStateLogIn} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
   const onAuthStateChanged = (user) => {
     setUser(user);
@@ -15,6 +15,7 @@ const Routes = () => {
     if (user === null) {
       setUserData([]);
     } else {
+      updateStateLogIn(user.uid)
       firestore()
         .collection('users')
         .doc(user.uid)
@@ -41,6 +42,7 @@ const Routes = () => {
               stateLogin: true,
             });
             setUserData(tmpdata);
+            
           }
         });
     }

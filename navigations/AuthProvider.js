@@ -8,6 +8,7 @@ export const AuthProvider = ({children}) => {
   const [userData, setUserData] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const login = async (email, password) => {
     try {
       await auth().signInWithEmailAndPassword(email, password);
@@ -29,6 +30,39 @@ export const AuthProvider = ({children}) => {
       console.log(e);
     }
   };
+  const updateStateLogOut = (uid) => {
+    firestore()
+    .collection('users')
+    .doc(uid)
+    .update({
+      stateLogin:false
+    })
+  }
+  const updateStateLogIn = (uid) => {
+    firestore()
+    .collection('users')
+    .doc(uid)
+    .update({
+      stateLogin:true
+    })
+  }
+  const updateStateExamTrue = (uid) =>{
+    firestore()
+    .collection('users')
+    .doc(uid)
+    .update({
+      stateExam:true
+    })
+  }
+  const updateStateExamFalse = (uid) =>{
+    firestore()
+    .collection('users')
+    .doc(uid)
+    .update({
+      stateExam:false
+    })
+  }
+  const upda
   return (
     <AuthContext.Provider
       value={{
@@ -41,6 +75,10 @@ export const AuthProvider = ({children}) => {
         logout,
         userData,
         setUserData,
+        updateStateLogIn,
+        updateStateLogOut,
+        updateStateExamTrue,
+        updateStateExamFalse
       }}>
       {children}
     </AuthContext.Provider>

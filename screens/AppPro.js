@@ -22,7 +22,7 @@ import { AuthContext } from '../navigations/AuthProvider';
 const AppPro = ({route}) => {
   const navigation = useNavigation();
   // const [percent, setPercent] = useState(100);
-  const {userData} = useContext(AuthContext);
+  const {userData,updateStateExamTrue} = useContext(AuthContext);
   const {language, topic, logo} = route.params;
   const [visible, setVisible] = useState(true);
   const [visibleEnd, setVisibleEnd] = useState(false);
@@ -49,7 +49,7 @@ const AppPro = ({route}) => {
   }, []);
 
   const handleStart = () => {
-    console.log('start');
+    updateStateExamTrue(userData.uid)
     setIsStart(true);
     setVisible(false);
     questions.map((question, index) => {
@@ -71,9 +71,6 @@ const AppPro = ({route}) => {
   };
   const scroll = useRef(null);
 
-  // const checkExist = (data, index) => {
-  //   return data.findIndex((e) => e.index === index);
-  // };
   const checkAnswer = () => {
     answers.map((answer) => {
       const countAnswer = userAnswers.filter((e) => e.index === answer.index);
@@ -117,6 +114,7 @@ const AppPro = ({route}) => {
     setIsStart(false);
     setTimeout(() => {
       setVisibleEnd(true);
+
     }, 0);
     
   };
@@ -168,16 +166,10 @@ const AppPro = ({route}) => {
       setIsStart(false);
     }, 0);
   };
-
-  // const addHistory = (score) => {
-  //   firestore().collection('histories').add({
-  //     userId:userData.uid,
-  //     date:Moment(new Date()).format('DD/MM/YYYY'),
-  //     logoLanguage:logo,
-  //     topic:topic,
-  //     score:score
-  //   })
-  // }
+  const handleBack = () =>{
+    updateStateExamFalse(userData.uid)
+    navigation.goBack()
+  }
   return (
     <View flex={1}>
       <StatusBar barStyle="light-content" />
@@ -195,7 +187,6 @@ const AppPro = ({route}) => {
           handleView={handleView}
           visible={visibleEnd}
           score={score}
-          // addHistory={addHistory}
         />
       </Animatable.View>
       <View style={styles.container}>
@@ -217,7 +208,7 @@ const AppPro = ({route}) => {
               size={35}
               color={'green'}
               style={{position: 'absolute', left: 0}}
-              onPress={() => navigation.goBack()}
+              onPress={() =>  handleBack()}
             />
             <Text style={styles.title}>{language}</Text>
             <Text style={styles.titleTopic}>Đề {topic}</Text>
